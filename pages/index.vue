@@ -44,18 +44,21 @@
               placeholder="Seu peso"
               class="rounded pa-3 text-white w-100 mb-4"
               type="text"
+              @input="validadeInput"
             >
             <input
               v-model="height"
               placeholder="Sua altura em cm"
               class="rounded pa-3 text-white w-100 mb-4"
               type="text"
+              @input="validadeInput"
             >
             <input
               v-model="age"
               placeholder="Sua idade"
               class="rounded pa-3 text-white w-100 mb-4"
               type="text"
+              @input="validadeInput"
             >
             <select
               v-model="sex"
@@ -77,7 +80,7 @@
         </div>
       </form>
       <main
-        class="result elevation-8 rounded overflow-hidden"
+        class="result rounded overflow-hidden"
         :style="{height: heightStyleR}"
       >
         <div class="pa-5">
@@ -133,10 +136,16 @@
       </main>
     </div>
   </v-app>
+  <ErrorPopup
+    :statePopupPanel="statePopupPanel"
+  >
+    {{ textPopupPanel }}
+  </ErrorPopup>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import ErrorPopup from '../components/Popups/ErrorPopup.vue';
 
 let goal = ref('')
 let weight = ref('')
@@ -204,7 +213,9 @@ const calculate = () => {
     heightStyle.value = '0'
     heightStyleR.value = '470px'
 
-  }else {console.log('vazio')}
+  }else {
+    alertPopupPanel('Preencha os campos!')
+  }
 }
 
 const redo = () => {
@@ -246,6 +257,25 @@ const tbmMasculino = () => {
   else if(activity.value === 'extremamenteativo')
     return TbmMasculino = TbmMasculino * 1.9
 }
+
+
+let statePopupPanel = ref(false)
+let textPopupPanel = ref('')
+
+const alertPopupPanel = (msg) => {
+  statePopupPanel.value = true
+  textPopupPanel.value = msg
+
+  setTimeout(() => {
+    statePopupPanel.value = false
+  },2000)
+}
+
+const validadeInput = (() => {
+  weight.value = weight.value.replace(/[^0-9]/g, "")
+  height.value = height.value.replace(/[^0-9]/g, "")
+  age.value = age.value.replace(/[^0-9]/g, "")
+})
 
 </script>
 
@@ -291,6 +321,7 @@ const tbmMasculino = () => {
         background-color: #202024;
         outline: none;
         border: none;
+        cursor: pointer;
       }
 
       input {

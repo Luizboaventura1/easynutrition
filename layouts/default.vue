@@ -14,7 +14,7 @@ useHead({
     {name: 'description', content: 'App web to calculate diet'},
     {name: 'author', content: ''},
     {name: 'keywords', content: 'diet,food,nutrition,fit,fitness,bodybuilding'},
-    { httpEquiv: 'Content-Language', content: 'pt-BR' }
+    {httpEquiv: 'content-language', content: 'pt-br'}
   ]
 })
 

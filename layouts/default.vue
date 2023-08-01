@@ -13,7 +13,8 @@ useHead({
     {name: 'theme-color', content: '#121214'},
     {name: 'description', content: 'App web to calculate diet'},
     {name: 'author', content: ''},
-    {name: 'keywords', content: 'diet,food,nutrition,fit,fitness,bodybuilding'}
+    {name: 'keywords', content: 'diet,food,nutrition,fit,fitness,bodybuilding'},
+    { httpEquiv: 'Content-Language', content: 'pt-BR' }
   ]
 })
 

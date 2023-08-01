@@ -1,2 +1,2 @@
 # eatwell
- Aplicativo de dieta para saber quando de proteina,carbo,goudura e caloria ingerir por dia
+ Aplicativo de dieta para saber quanto de proteina,carbo,gordura e caloria consumir por dia

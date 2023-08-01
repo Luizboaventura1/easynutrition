@@ -4,9 +4,9 @@
       <v-container>
         <nav class="d-flex justify-start align-center">
           <h1
-            class="font-weight-bold text-white text-h5"
+            class="font-weight-bold text-white text-h6"
           >
-            EatWell
+            <span class="logo">Easy</span>Nutrition
           </h1>
         </nav>
       </v-container>
@@ -18,7 +18,9 @@
       >
         <div class="pa-5">
           <div class="w-100 text-center pb-3">
-            <h1 class="text-h6 text-white font-weight-bold">EatWell</h1>
+            <h1 class="text-h6 text-white font-weight-bold">
+              <span class="logo">Easy</span>Nutrition
+            </h1>
           </div>
           <div class="w-100">
             <select
@@ -86,9 +88,9 @@
         <div class="pa-5">
           <div class="s-100">
             <h1
-              class="text-white font-weight-bold pb-3"
+              class="text-white font-weight-bold text-h6 pb-3"
             >
-              EatWell
+              <span class="logo">Easy</span>Nutrition
             </h1>
           </div>
           <div class="w-100">
@@ -309,7 +311,9 @@ const validadeInput = (() => {
   
   .container-form {
     height: calc(100% - 30px);
-    background-color: rgb(46, 48, 49);
+    background-image: linear-gradient(to top right,
+    #282a2b,
+    #1e1f20);
 
     form {
       transition: 1s;
@@ -365,5 +369,9 @@ const validadeInput = (() => {
         color: rgb(0, 255, 195);
       }
     }
+  }
+
+  .logo {
+    color: #009dff;
   }
 </style>

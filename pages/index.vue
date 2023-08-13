@@ -149,6 +149,10 @@
 import { ref } from 'vue';
 import ErrorPopup from '../components/Popups/ErrorPopup.vue';
 
+// windows
+let heightStyle = ref('500')
+let heightStyleR = ref('0')
+
 let goal = ref('')
 let weight = ref('')
 let height = ref('')
@@ -160,6 +164,9 @@ let protein = ref(0)
 let carbohydrate = ref(0)
 let fat = ref(0)
 let calorie = ref(0)
+
+
+// Final sum
 
 let calculatedProtein = computed(() => {
   return parseFloat(protein.value).toFixed(2).replace('.',',')
@@ -177,22 +184,20 @@ let calculatedCalories = computed(() => {
   return parseFloat(calorie.value).toFixed(2).replace('.',',')
 })
 
-let heightStyle = ref('500')
-let heightStyleR = ref('0')
-
 const calculate = () => {
   let weightFormat = Number(weight.value)
+
   if(verifyInputs()) {
     if(goal.value === 'opt1') {
       if(sex.value === 'm') {
         calorie.value = tbmMasculino() - 500
-        protein.value = weightFormat * 2
+        protein.value = weightFormat * correctProtein.loseWeight
         fat.value = (Number(calorie.value) * 0.3) / 9
         carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
       }
       else if(sex.value === 'f') {
         calorie.value = tbmFeminimo() - 500
-        protein.value = weightFormat * 2
+        protein.value = weightFormat * correctProtein.loseWeight
         fat.value = (Number(calorie.value) * 0.3) / 9
         carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
       }
@@ -200,13 +205,13 @@ const calculate = () => {
     else if(goal.value === 'opt2') {
       if(sex.value === 'm') {
         calorie.value = tbmMasculino() + 1000
-        protein.value = weightFormat * 2
+        protein.value = weightFormat * correctProtein.gainWeight
         fat.value = (Number(calorie.value) * 0.3) / 9
         carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
       }
       else if(sex.value === 'f') {
         calorie.value = tbmFeminimo() + 700
-        protein.value = weightFormat * 2
+        protein.value = weightFormat * correctProtein.gainWeight
         fat.value = (Number(calorie.value) * 0.3) / 9
         carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
       }
@@ -220,9 +225,9 @@ const calculate = () => {
   }
 }
 
-const redo = () => {
-  heightStyle.value = '500'
-  heightStyleR.value = '0'
+const correctProtein = {
+  gainWeight: 2,
+  loseWeight: 1.2
 }
 
 const verifyInputs = () => {
@@ -235,6 +240,7 @@ const tbmFeminimo = () => {
   let ageFormat = Number(age.value)
   
   let TbmFeminimo = 447.593 + (9.247 * weightFormat) + (3.098 * heightFormat) - (4.330 * ageFormat)
+  
   if(activity.value === 'sedentario') 
     return TbmFeminimo = TbmFeminimo * 1.2
   else if(activity.value === 'levementeativo') 
@@ -249,7 +255,9 @@ const tbmMasculino = () => {
   let weightFormat = Number(weight.value)
   let heightFormat = Number(height.value)
   let ageFormat = Number(age.value)
+
   let TbmMasculino = 88.362 + (13.397 * weightFormat) + (4.799 * heightFormat) - (5.677 * ageFormat)
+  
   if(activity.value === 'sedentario') 
     return TbmMasculino = TbmMasculino * 1.2
   else if(activity.value === 'levementeativo') 
@@ -260,6 +268,10 @@ const tbmMasculino = () => {
     return TbmMasculino = TbmMasculino * 1.9
 }
 
+const redo = () => {
+  heightStyle.value = '500'
+  heightStyleR.value = '0'
+}
 
 let statePopupPanel = ref(false)
 let textPopupPanel = ref('')
@@ -311,9 +323,7 @@ const validadeInput = (() => {
   
   .container-form {
     height: calc(100% - 30px);
-    background-image: linear-gradient(to top right,
-    #282a2b,
-    #1e1f20);
+    background-image: linear-gradient(90deg,#36393e,#222428);
 
     form {
       transition: 1s;

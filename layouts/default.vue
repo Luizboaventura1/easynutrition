@@ -6,20 +6,14 @@
 </template>
 
 <script setup>
-
 useHead({ 
   title: "EasyNutrition", 
   meta: [
     {name: 'theme-color', content: '#121214'},
-    {name: 'description', content: 'App web to calculate diet'},
-    {name: 'author', content: ''},
-    {name: 'keywords', content: 'diet,food,nutrition,fit,fitness,bodybuilding'},
-    {httpEquiv: 'content-language', content: 'pt-br'}
+    {name: 'description', content: 'Aplicativo simples que calcula os macronutrientes necessários que devem ser ingeridos diariamente.'},
+    {name: 'author', content: 'Luiz'},
+    {name: 'keywords', content: 'dieta,comida,nutricao,fitness,,bodybuilding'},
+    {httpEquiv: 'content-language', content: 'pt-BR'}
   ]
 })
-
 </script>
-
-<style lang="scss" scoped>
-
-</style>

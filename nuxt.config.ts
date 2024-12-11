@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
 
-  css: ['vuetify/lib/styles/main.css'],
+  css: ['vuetify/lib/styles/main.css','./assets/css/main.css'],
   build: {
     transpile: ['vuetify']
   }

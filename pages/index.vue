@@ -241,8 +241,7 @@ const resetForm = () => {
   fatPerDay.value = 0;
   caloriesPerDay.value = 0;
 
-  formHeight.value = 500;
-  resultHeight.value = "0";
+  stateModal.value = false
 };
 
 const showErrorMessage = (message) => {

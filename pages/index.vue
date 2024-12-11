@@ -1,387 +1,402 @@
 <template>
-  <v-app>
+  <v-app class="bg-primary-esn">
     <header>
       <v-container>
         <nav class="d-flex justify-start align-center">
-          <h1
-            class="font-weight-bold text-white text-h6"
-          >
-            <span class="logo">Easy</span>Nutrition
+          <h1 class="font-weight-medium text-primary-esn text-h6">
+            <span class="text-zual-esn">Easy</span>Nutrition
           </h1>
         </nav>
       </v-container>
     </header>
-    <div class="container-form d-flex justify-center align-center">
-      <form
-        :style="{height: heightStyle+'px'}"
-        class="rounded elevation-8 overflow-hidden"
-      >
-        <div class="pa-5">
-          <div class="w-100 text-center pb-3">
-            <h1 class="text-h6 text-white font-weight-bold">
-              <span class="logo">Easy</span>Nutrition
-            </h1>
-          </div>
-          <div class="w-100">
-            <select
-              v-model="goal"
-              class="option-form text-white pa-3 rounded w-100 mb-4"
-            >
-              <option value="">Qual o seu objetivo?</option>
-              <option value="opt1">Perder peso</option>
-              <option value="opt2">Ganhar massa muscular</option>
-            </select>
-            <select
-              v-model="activity"
-              class="option-form text-white pa-3 rounded w-100 mb-4"
-            >
-              <option value="">Frequência de atividade fisíca</option>
-              <option value="sedentario">Sedentário</option>
-              <option value="muitoativo">Muito ativo</option>
-              <option value="levementeativo">Levemente ativo</option>
-              <option value="extremamenteativo">Extremamente ativo</option>
-            </select>
-            <input
-              v-model="weight"
-              placeholder="Seu peso"
-              class="rounded pa-3 text-white w-100 mb-4"
-              type="text"
-              @input="validadeInput"
-            >
-            <input
-              v-model="height"
-              placeholder="Sua altura em cm"
-              class="rounded pa-3 text-white w-100 mb-4"
-              type="text"
-              @input="validadeInput"
-            >
-            <input
-              v-model="age"
-              placeholder="Sua idade"
-              class="rounded pa-3 text-white w-100 mb-4"
-              type="text"
-              @input="validadeInput"
-            >
-            <select
-              v-model="sex"
-              class="option-form text-white pa-3 rounded w-100 mb-4"
-            >
-              <option value="">Sexo</option>
-              <option value="m">Masculino</option>
-              <option value="f">Feminino</option>
-            </select>
-          </div>
-          <div class="w-100">
-            <v-btn
-              @click="calculate"
-              class="w-100 font-weight-bold bg-blue-accent-3"
-            >
-              Calcular
-            </v-btn>
-          </div>
-        </div>
-      </form>
-      <main
-        class="result rounded overflow-hidden"
-        :style="{height: heightStyleR}"
-      >
-        <div class="pa-5">
-          <div class="s-100">
-            <h1
-              class="text-white font-weight-bold text-h6 pb-3"
-            >
-              <span class="logo">Easy</span>Nutrition
-            </h1>
-          </div>
-          <div class="w-100">
-            <div class="quantity mb-4 w-100 rounded pa-3">
-              <span class="title-protein font-weight-bold">Proteína</span>
-              <div class="d-flex justify-space-between">
-                <span class="text-white">{{ calculatedProtein }}g</span>
-                <div class="text-grey-darken-1">p/dia</div>
+    <div class="form-container">
+      <div>
+        <Transition>
+          <form v-if="!stateModal" class="form overflow-hidden">
+            <div class="form-content pa-5">
+              <div class="form-header w-100 text-center pb-3">
+                <h1 class="text-h6 text-white font-weight-medium">
+                  <span class="text-zual-esn">Easy</span>Nutrition
+                </h1>
+              </div>
+              <div class="form-body w-100">
+                <select
+                  v-model="userGoal"
+                  class="form-select text-white pa-3 w-100 mb-4"
+                >
+                  <option value="">Select your goal</option>
+                  <option value="lose_weight">Lose weight</option>
+                  <option value="gain_muscle">Gain muscle</option>
+                </select>
+                <select
+                  v-model="activityLevel"
+                  class="form-select text-white pa-3 w-100 mb-4"
+                >
+                  <option value="">Activity level</option>
+                  <option value="sedentary">Sedentary</option>
+                  <option value="lightly_active">Lightly active</option>
+                  <option value="very_active">Very active</option>
+                  <option value="extremely_active">Extremely active</option>
+                </select>
+                <input
+                  v-model="userWeight"
+                  placeholder="Your weight (kg)"
+                  class="form-input pa-3 text-white w-100 mb-4"
+                  type="number"
+                  @input="validateInput"
+                />
+                <input
+                  v-model="userHeight"
+                  placeholder="Your height (cm)"
+                  class="form-input pa-3 text-white w-100 mb-4"
+                  type="number"
+                  @input="validateInput"
+                />
+                <input
+                  v-model="userAge"
+                  placeholder="Your age"
+                  class="form-input pa-3 text-white w-100 mb-4"
+                  type="number"
+                  @input="validateInput"
+                />
+                <select
+                  v-model="userGender"
+                  class="form-select text-white pa-3 w-100 mb-4"
+                >
+                  <option value="">Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="form-footer w-100">
+                <v-btn
+                  @click="calculateNutrition"
+                  style="border-radius: 10px"
+                  class="w-100 font-weight-bold bg-blue-accent-3"
+                  >Calculate</v-btn
+                >
               </div>
             </div>
-
-            <div class="quantity mb-4 w-100 rounded pa-3">
-              <span class="title-carbohydrate font-weight-bold">Carboidrato</span>
-              <div class="d-flex justify-space-between">
-                <span class="text-white">{{ calculatedCarbohydrate }}g</span>
-                <div class="text-grey-darken-1">p/dia</div>
+          </form>
+        </Transition>
+        <Transition>
+          <form v-if="stateModal" class="form result-section overflow-hidden">
+            <div class="result-content pa-5">
+              <div class="result-header w-100 pb-3">
+                <h1 class="text-h6 text-center text-white font-weight-medium">
+                  <span class="text-zual-esn">Easy</span>Nutrition
+                </h1>
+              </div>
+              <div class="result-body w-100">
+                <div class="result-item mb-4 w-100 rounded pa-3">
+                  <span class="protein result-title font-weight-bold"
+                    >Protein</span
+                  >
+                  <div class="d-flex justify-space-between">
+                    <span class="text-white">{{ proteinPerDay }}g</span>
+                    <div class="text-grey-darken-1">per day</div>
+                  </div>
+                </div>
+                <div class="result-item mb-4 w-100 rounded pa-3">
+                  <span class="carbohydrate result-title font-weight-bold"
+                    >Carbohydrate</span
+                  >
+                  <div class="d-flex justify-space-between">
+                    <span class="text-white">{{ carbohydratePerDay }}g</span>
+                    <div class="text-grey-darken-1">per day</div>
+                  </div>
+                </div>
+                <div class="result-item mb-4 w-100 rounded pa-3">
+                  <span class="fat result-title font-weight-bold">Fat</span>
+                  <div class="d-flex justify-space-between">
+                    <span class="text-white">{{ fatPerDay }}g</span>
+                    <div class="text-grey-darken-1">per day</div>
+                  </div>
+                </div>
+                <div class="result-item mb-4 w-100 rounded pa-3">
+                  <span class="calories result-title font-weight-bold"
+                    >Calories</span
+                  >
+                  <div class="d-flex justify-space-between">
+                    <span class="text-white">{{ caloriesPerDay }} kcal</span>
+                    <div class="text-grey-darken-1">per day</div>
+                  </div>
+                </div>
+                <div class="result-footer w-100">
+                  <v-btn
+                    class="w-100 font-weight-bold text-blue-accent-2"
+                    variant="text"
+                    @click="resetForm"
+                    >Reset</v-btn
+                  >
+                </div>
               </div>
             </div>
-
-            <div class="quantity mb-4 w-100 rounded pa-3">
-              <span class="title-fat font-weight-bold">Gordura</span>
-              <div class="d-flex justify-space-between">
-                <span class="text-white">{{ calculatedFat }}g</span>
-                <div class="text-grey-darken-1">p/dia</div>
-              </div>
-            </div>
-
-            <div class="quantity mb-4 w-100 rounded pa-3">
-              <span class="title-calorie font-weight-bold">Calorias</span>
-              <div class="d-flex justify-space-between">
-                <span class="text-white">{{ calculatedCalories }}cal</span>
-                <div class="text-grey-darken-1">p/dia</div>
-              </div>
-            </div>
-            <div class="w-100">
-              <v-btn class="w-100 font-weight-bold text-blue-accent-2"
-                variant="text"
-                @click="redo"
-              >
-                Refazer
-              </v-btn>
-            </div>
-          </div>
-        </div>
-      </main>
+          </form>
+        </Transition>
+      </div>
     </div>
   </v-app>
-  <ErrorPopup
-    :statePopupPanel="statePopupPanel"
-  >
-    {{ textPopupPanel }}
+
+  <ErrorPopup :statePopupPanel="errorPopupVisible">
+    {{ errorMessage }}
   </ErrorPopup>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import ErrorPopup from '../components/Popups/ErrorPopup.vue';
+import { ref } from "vue";
+import ErrorPopup from "../components/Popups/ErrorPopup.vue";
 
-// windows
-let heightStyle = ref('500')
-let heightStyleR = ref('0')
+let stateModal = ref(false);
 
-let goal = ref('')
-let weight = ref('')
-let height = ref('')
-let sex = ref('')
-let age = ref('')
-let activity = ref('')
+const userGoal = ref("");
+const userWeight = ref("");
+const userHeight = ref("");
+const userAge = ref("");
+const userGender = ref("");
+const activityLevel = ref("");
 
-let protein = ref(0)
-let carbohydrate = ref(0)
-let fat = ref(0)
-let calorie = ref(0)
+const proteinPerDay = ref(0);
+const carbohydratePerDay = ref(0);
+const fatPerDay = ref(0);
+const caloriesPerDay = ref(0);
 
+const calculateNutrition = () => {
+  const weight = parseFloat(userWeight.value);
+  const height = parseFloat(userHeight.value);
+  const age = parseInt(userAge.value);
 
-// Final sum
+  if (validateInputs(weight, height, age)) {
+    const bmr = calculateBMR(weight, height, age, userGender.value);
+    const activityMultiplier = getActivityMultiplier(activityLevel.value);
+    const totalCalories = bmr * activityMultiplier;
 
-let calculatedProtein = computed(() => {
-  return parseFloat(protein.value).toFixed(2).replace('.',',')
-})
-
-let calculatedCarbohydrate = computed(() => {
-  return parseFloat(carbohydrate.value).toFixed(2).replace('.',',')
-})
-
-let calculatedFat = computed(() => {
-  return parseFloat(fat.value).toFixed(2).replace('.',',')
-})
-
-let calculatedCalories = computed(() => {
-  return parseFloat(calorie.value).toFixed(2).replace('.',',')
-})
-
-const calculate = () => {
-  let weightFormat = Number(weight.value)
-
-  if(verifyInputs()) {
-    if(goal.value === 'opt1') {
-      if(sex.value === 'm') {
-        calorie.value = tbmMasculino() - 500
-        protein.value = weightFormat * correctProtein.loseWeight
-        fat.value = (Number(calorie.value) * 0.3) / 9
-        carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
-      }
-      else if(sex.value === 'f') {
-        calorie.value = tbmFeminimo() - 500
-        protein.value = weightFormat * correctProtein.loseWeight
-        fat.value = (Number(calorie.value) * 0.3) / 9
-        carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
-      }
-    }
-    else if(goal.value === 'opt2') {
-      if(sex.value === 'm') {
-        calorie.value = tbmMasculino() + 1000
-        protein.value = weightFormat * correctProtein.gainWeight
-        fat.value = (Number(calorie.value) * 0.3) / 9
-        carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
-      }
-      else if(sex.value === 'f') {
-        calorie.value = tbmFeminimo() + 700
-        protein.value = weightFormat * correctProtein.gainWeight
-        fat.value = (Number(calorie.value) * 0.3) / 9
-        carbohydrate.value = (parseFloat(calorie.value) - (parseFloat(protein.value) * 4) - (parseFloat(fat.value) * 9)) / 4
-      }
+    if (userGoal.value === "lose_weight") {
+      caloriesPerDay.value = totalCalories - 500;
+    } else if (userGoal.value === "gain_muscle") {
+      caloriesPerDay.value = totalCalories + 500;
     }
 
-    heightStyle.value = '0'
-    heightStyleR.value = '470px'
+    proteinPerDay.value = (weight * 1.8).toFixed(2);
+    fatPerDay.value = ((caloriesPerDay.value * 0.3) / 9).toFixed(2);
+    carbohydratePerDay.value = (
+      (caloriesPerDay.value - (proteinPerDay.value * 4 + fatPerDay.value * 9)) /
+      4
+    ).toFixed(2);
 
-  }else {
-    alertPopupPanel('Preencha os campos!')
+    stateModal.value = true;
+  } else {
+    showErrorMessage("Please fill out all fields correctly!");
   }
-}
+};
 
-const correctProtein = {
-  gainWeight: 2,
-  loseWeight: 1.2
-}
+const calculateBMR = (weight, height, age, gender) => {
+  if (gender === "male") {
+    return 10 * weight + 6.25 * height - 5 * age + 5;
+  } else if (gender === "female") {
+    return 10 * weight + 6.25 * height - 5 * age - 161;
+  }
+  return 0;
+};
 
-const verifyInputs = () => {
-  return (goal.value != '' && weight.value != '' && height.value && age.value != '' && sex.value != '' && activity.value != '') ? true : false
-}
+const getActivityMultiplier = (level) => {
+  switch (level) {
+    case "sedentary":
+      return 1.2;
+    case "lightly_active":
+      return 1.375;
+    case "very_active":
+      return 1.55;
+    case "extremely_active":
+      return 1.725;
+    default:
+      return 1.2;
+  }
+};
 
-const tbmFeminimo = () => {
-  let weightFormat = Number(weight.value)
-  let heightFormat = Number(height.value)
-  let ageFormat = Number(age.value)
-  
-  let TbmFeminimo = 447.593 + (9.247 * weightFormat) + (3.098 * heightFormat) - (4.330 * ageFormat)
-  
-  if(activity.value === 'sedentario') 
-    return TbmFeminimo = TbmFeminimo * 1.2
-  else if(activity.value === 'levementeativo') 
-    return TbmFeminimo = TbmFeminimo * 1.375
-  else if(activity.value === 'muitoativo')
-    return TbmFeminimo = TbmFeminimo * 1.725
-  else if(activity.value === 'extremamenteativo')
-    return TbmFeminimo = TbmFeminimo * 1.9
-}
+const validateInputs = (weight, height, age) => {
+  return (
+    !isNaN(weight) &&
+    weight > 0 &&
+    !isNaN(height) &&
+    height > 0 &&
+    !isNaN(age) &&
+    age > 0 &&
+    userGoal.value &&
+    userGender.value &&
+    activityLevel.value
+  );
+};
 
-const tbmMasculino = () => {
-  let weightFormat = Number(weight.value)
-  let heightFormat = Number(height.value)
-  let ageFormat = Number(age.value)
+const resetForm = () => {
+  userGoal.value = "";
+  userWeight.value = "";
+  userHeight.value = "";
+  userAge.value = "";
+  userGender.value = "";
+  activityLevel.value = "";
 
-  let TbmMasculino = 88.362 + (13.397 * weightFormat) + (4.799 * heightFormat) - (5.677 * ageFormat)
-  
-  if(activity.value === 'sedentario') 
-    return TbmMasculino = TbmMasculino * 1.2
-  else if(activity.value === 'levementeativo') 
-    return TbmMasculino = TbmMasculino * 1.375
-  else if(activity.value === 'muitoativo')
-    return TbmMasculino = TbmMasculino * 1.725
-  else if(activity.value === 'extremamenteativo')
-    return TbmMasculino = TbmMasculino * 1.9
-}
+  proteinPerDay.value = 0;
+  carbohydratePerDay.value = 0;
+  fatPerDay.value = 0;
+  caloriesPerDay.value = 0;
 
-const redo = () => {
-  heightStyle.value = '500'
-  heightStyleR.value = '0'
-}
+  formHeight.value = 500;
+  resultHeight.value = "0";
+};
 
-let statePopupPanel = ref(false)
-let textPopupPanel = ref('')
-
-const alertPopupPanel = (msg) => {
-  statePopupPanel.value = true
-  textPopupPanel.value = msg
+const showErrorMessage = (message) => {
+  errorMessage.value = message;
+  errorPopupVisible.value = true;
 
   setTimeout(() => {
-    statePopupPanel.value = false
-  },2000)
-}
+    errorPopupVisible.value = false;
+  }, 3000);
+};
 
-const validadeInput = (() => {
-  weight.value = weight.value.replace(/[^0-9]/g, "")
-  height.value = height.value.replace(/[^0-9]/g, "")
-  age.value = age.value.replace(/[^0-9]/g, "")
-})
+const validateInput = (event) => {
+  const value = event.target.value;
+  if (value < 0) {
+    event.target.value = "";
+  }
+};
 
+// Error popup state
+const errorPopupVisible = ref(false);
+const errorMessage = ref("");
 </script>
 
-<style lang="scss">
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
+<style scoped>
+header {
+  height: 64px;
+}
 
-  html,body {
-    height: 100%;
-  }
+.bg-primary-esn {
+  background-color: #202020;
+}
 
-  header {
-    background-color: #121214;
-    nav {
-      height: 30px;
-    }
-  }
+.text-zual-esn {
+  color: #2c8af6;
+}
 
-  ::-webkit-scrollbar {
-    background-color: #202024;
-    width: 10px;
-  }
+.text-primary-esn {
+  color: rgb(233, 233, 233);
+}
 
-  ::-webkit-scrollbar-thumb {
-    background-color: rgb(46, 48, 49);
-    border-radius: 10px;
-  }
-  
-  .container-form {
-    height: calc(100% - 30px);
-    background-image: linear-gradient(90deg,#36393e,#222428);
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 64px);
+}
 
-    form {
-      transition: 1s;
-      width: 100%;
-      max-width: 360px;
-      background-color: #121214;
+.form,
+.result-section {
+  width: 100%;
+  max-width: 400px;
+  transition: height 0.3s ease;
+  border: 1px solid #383838;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
 
-      .option-form {
-        background-color: #202024;
-        outline: none;
-        border: none;
-        cursor: pointer;
-      }
+.form-select,
+.form-input {
+  background-color: #292929;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 10px;
+  width: 100%;
+}
 
-      input {
-        background-color: #202024;
-        outline: none;
-        border: none;
-      }
-    }
-  }
+.form-select:focus,
+.form-input:focus {
+  outline: 2px solid #42a5f5;
+}
 
-  .result {
-    transition: 1s;
-    width: 100%;
-    max-width: 360px;
-    background-color: #121214;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
+.result-item {
+  background-color: #292929;
+}
 
-    h1 {
-      font-size: 18px;
-    }
+.form-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+}
 
-    .quantity {
-      background-color: #202024;
+.form-container > div {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 500px;
+}
 
-      .title-protein {
-        color: rgb(255, 196, 0);
-      }
+.form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: opacity 0.3s ease-in-out;
+}
 
-      .title-carbohydrate {
-        color: rgb(0, 153, 255);
-      }
+.result-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: opacity 0.3s ease-in-out;
+}
 
-      .title-fat {
-        color: rgb(255, 132, 0);
-      }
+.form[style*="opacity: 0"] {
+  visibility: hidden;
+  opacity: 0;
+}
 
-      .title-calorie {
-        color: rgb(0, 255, 195);
-      }
-    }
-  }
+.form[style*="opacity: 1"] {
+  visibility: visible;
+  opacity: 1;
+}
 
-  .logo {
-    color: #009dff;
-  }
+.protein {
+  color: #ff8c00;
+}
+
+.carbohydrate {
+  color: #4caf50;
+}
+
+.fat {
+  color: #2196f3;
+}
+
+.calories {
+  color: #8a41ff;
+}
+
+.result-footer {
+  margin-top: 16px;
+}
+
+.bg-blue-accent-3 {
+  background-color: #42a5f5;
+  color: #fff;
+}
+
+.text-blue-accent-2 {
+  color: #64b5f6;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>
